@@ -7,17 +7,17 @@ def link(day, month, year):
 
 
     r = requests.get(
-        f"https://www.sodexo.fi/ruokalistat/output/daily_json/12/{year}/{month}/{day}/fi.json")
+        f"https://www.sodexo.fi/ruokalistat/output/daily_json/60/{year}-{month}-{day}")
     
     coursesData = r.json()["courses"]
-    z = 0
+    z = 1
     food = []
     category = []
     flist = []
 
     while z != len(coursesData):
-        category.append(coursesData[z]["category"])
-        food.append(coursesData[z]["title_fi"])
+        category.append(coursesData[str(z)]["category"])
+        food.append(coursesData[str(z)]["title_fi"])
         lunchToday = list(zip(category, food))
         z += 1
 
@@ -35,7 +35,7 @@ def today():
     d = today.strftime("%d")  # Day
     m = today.strftime("%m")  # Month
     y = today.strftime("%Y")  # Year
-    courseData = link(d,m,y)
+    courseData = link(d.rstrip(""),m.rstrip(""),y.rstrip(""))
 
     return courseData
 
@@ -50,7 +50,7 @@ def tomorrow():
     m = tomorrow[1]  # Month
     y = tomorrow[0]  # Year
 
-    courseData = link(d,m,y)
+    courseData = link(d.rstrip(""),m.rstrip(""),y.rstrip(""))
     return courseData
 
 
@@ -64,7 +64,7 @@ def yesterday():
     m = yesterday[1]  # Month
     y = yesterday[0]  # Year
 
-    courseData = link(d,m,y)
+    courseData = link(d.rstrip(""),m.rstrip(""),y.rstrip(""))
     return courseData
 
 
@@ -73,7 +73,7 @@ app = Flask(__name__)
 @app.route('/lunch', methods=['POST'])
 def lunch():
     text = request.form.get('text', '')
-    if 'today' in text.lower() and today() not in text:
+    if 'today' in text.lower() and today() not in text: # Return today()
         return {"text": f"{today()}"}  # DYI JSON
     if 'tomorrow' in text.lower() and tomorrow() not in text:
         return {"text": f"{tomorrow()}"}  # DYI JSON
