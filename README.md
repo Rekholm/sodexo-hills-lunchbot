@@ -1,5 +1,5 @@
 # sodexo-hills-lunchbot
-Returs the lunch for yesterday, today or tomorrow
+Returns the lunch of yesterday, today or tomorrow
 
 
 This bot provides you with the lunch for yesterday, today or tomorrow. This bot can easily be integrated to slack under "slash" commands for example
